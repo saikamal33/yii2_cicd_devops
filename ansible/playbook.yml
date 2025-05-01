@@ -27,12 +27,6 @@
         name: nginx
         state: present
     
-    - name: Configure NGINX reverse proxy
-      copy:
-        src: yii2.conf
-        dest: /etc/nginx/conf.d/yii2.conf
-      notify: Restart nginx
-    
     - name: Restart nginx
       service:
         name: nginx
