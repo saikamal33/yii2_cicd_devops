@@ -28,6 +28,7 @@ jobs:
 
     - name: Run Ansible Playbook
       run: |
+        mkdir -p ~/.ssh
         echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ansible-playbook ansible/playbook.yml -i ansible/inventory \
