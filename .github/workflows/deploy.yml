@@ -21,6 +21,20 @@ jobs:
     - name: Push image to DockerHub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/yii2-app:latest
 
+    - name: Install Ansible
+      run: |
+        sudo apt update
+        sudo apt install -y ansible
+
+    - name: Run Ansible Playbook
+      run: |
+        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+        chmod 600 key.pem
+        ansible-playbook ansible/playbook.yml -i ansible/inventory \
+          --private-key key.pem \
+          -u ubuntu \
+          --ssh-extra-args="-o StrictHostKeyChecking=no"
+
     - name: SSH to EC2 and update service
       uses: appleboy/ssh-action@master
       with:
