@@ -37,4 +37,12 @@
       service:
         name: nginx
         state: restarted
+    
+    - name: Pull the latest Docker image
+      shell: docker pull {{ docker_image }}
+      become: yes
+
+    - name: Update the Docker Swarm service
+      shell: docker service update --image {{ docker_image }} yii2_app_service
+      become: yes
 

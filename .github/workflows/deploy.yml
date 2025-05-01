@@ -28,20 +28,11 @@ jobs:
 
     - name: Run Ansible Playbook
       run: |
-        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-        chmod 600 key.pem
+        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
         ansible-playbook ansible/playbook.yml -i ansible/inventory \
           --private-key key.pem \
           -u ubuntu \
           --ssh-extra-args="-o StrictHostKeyChecking=no"
 
-    - name: SSH to EC2 and update service
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ubuntu
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/yii2-app:latest
-          docker service update --image ${{ secrets.DOCKER_USERNAME }}/yii2-app:latest yii2_app_service
 
