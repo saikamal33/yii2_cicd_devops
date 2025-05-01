@@ -5,36 +5,36 @@
   
   tasks:
     - name: Install Docker
-  apt:
-    name: docker.io
-    state: present
-    update_cache: yes
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
 
-- name: Enable Docker
-  systemd:
-    name: docker
-    enabled: yes
-    state: started
-
-- name: Install Docker Compose
-  get_url:
-    url: https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-x86_64
-    dest: /usr/local/bin/docker-compose
-    mode: '0755'
-
-- name: Install NGINX
-  apt:
-    name: nginx
-    state: present
-
-- name: Configure NGINX reverse proxy
-  copy:
-    src: yii2.conf
-    dest: /etc/nginx/conf.d/yii2.conf
-  notify: Restart nginx
-
-- name: Restart nginx
-  service:
-    name: nginx
-    state: restarted
+    - name: Enable Docker
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
+    
+    - name: Install Docker Compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+    
+    - name: Install NGINX
+      apt:
+        name: nginx
+        state: present
+    
+    - name: Configure NGINX reverse proxy
+      copy:
+        src: yii2.conf
+        dest: /etc/nginx/conf.d/yii2.conf
+      notify: Restart nginx
+    
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
 
