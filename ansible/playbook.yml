@@ -33,18 +33,10 @@
       service:
         name: nginx
         state: restarted
-
-    - name: Initialize Swarm if not already part of one
+        
+    - name: Initialize Docker Swarm (if not already part of one)
       shell: docker swarm init
       when: swarm_status.stdout != "active"
-      register: init_output
-      failed_when: init_output.rc != 0 and '"This node is already part of a swarm."' not in init_output.stderr
-
-    - name: Check if node is a Swarm manager
-      shell: docker info --format '{{ .Swarm.ControlAvailable }}'
-      register: is_manager
-      changed_when: false
-      failed_when: false
       
     - name: Pull the latest Docker image
       shell: docker pull {{ docker_image }}
