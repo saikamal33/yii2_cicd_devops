@@ -1,1 +1,1 @@
-3.88.39.239 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
+44.212.40.83 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
