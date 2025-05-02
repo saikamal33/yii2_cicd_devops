@@ -34,9 +34,11 @@
         name: nginx
         state: restarted
         
-    - name: Initialize Docker Swarm (if not already part of one)
-      shell: docker swarm init
-      when: swarm_status.stdout != "active"
+    - name: Check if node is already in a swarm
+      shell: docker info --format '{{{{ .Swarm.LocalNodeState }}}}'
+      register: swarm_status
+      changed_when: false
+      failed_when: false 
       
     - name: Pull the latest Docker image
       shell: docker pull {{ docker_image }}
