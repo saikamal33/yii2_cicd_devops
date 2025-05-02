@@ -33,13 +33,6 @@
       service:
         name: nginx
         state: restarted
-        
-    - name: Check if node is a Swarm manager
-      shell: docker info --format '{{{{ .Swarm.ControlAvailable }}}}'
-      register: is_manager
-      changed_when: false
-      failed_when: false
-
 
     - name: Initialize Swarm if not already part of one
       shell: docker swarm init
