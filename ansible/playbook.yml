@@ -45,7 +45,7 @@
       become: yes
       
     - name: Check if the service exists
-      shell: docker service ls --format '{{.Name}}' | grep -w yii2_app_service
+      shell: docker service ls --format '{% raw %}{{.Name}}{% endraw %}' | grep -w yii2_app_service
       register: service_check
       ignore_errors: true
       changed_when: false
