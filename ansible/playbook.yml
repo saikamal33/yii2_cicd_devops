@@ -35,9 +35,8 @@
         state: restarted
         
     - name: Check if node is already in a swarm
-      shell: docker info --format '{{ .Swarm.LocalNodeState }}'
-      register: docker_info
-      failed_when: "'unknown' in docker_info.stdout"
+      shell: docker info --format '{{'{{'}} .Swarm.LocalNodeState {{'}}'}}'
+      register: swarm_status
       changed_when: false
 
     - name: Pull the latest Docker image
