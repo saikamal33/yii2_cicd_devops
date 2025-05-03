@@ -44,6 +44,22 @@
       shell: docker pull {{ docker_image }}
       become: yes
       
+    - name: Check if the service exists
+      shell: docker service ls --format '{{.Name}}' | grep -w yii2_app_service
+      register: service_check
+      ignore_errors: true
+      changed_when: false
+    
+    - name: Remove existing Docker service if it exists
+      shell: docker service rm yii2_app_service
+      when: service_check.rc == 0
+      become: true
+    
+    - name: Wait a moment for service cleanup
+      pause:
+        seconds: 5
+      when: service_check.rc == 0
+      
     - name: Create the Docker Swarm service
       shell: docker service create --name yii2_app_service --replicas 1 --publish 80:80 {{ docker_image }}
       become: true
