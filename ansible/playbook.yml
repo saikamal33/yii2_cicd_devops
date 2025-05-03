@@ -34,11 +34,12 @@
         name: nginx
         state: restarted
         
-    - name: Check if node is already in a swarm
-      shell: docker info --format '{{'{{'}} .Swarm.LocalNodeState {{'}}'}}'
-      register: swarm_status
-      changed_when: false
-
+    - name: Initialize Docker Swarm
+      shell: docker swarm init --advertise-addr {{ swarm_ip }}
+      register: swarm_init
+      failed_when: "'This node is already part of a swarm' not in swarm_init.stderr and swarm_init.rc != 0"
+      changed_when: "'This node is already part of a swarm' not in swarm_init.stderr"
+      
     - name: Pull the latest Docker image
       shell: docker pull {{ docker_image }}
       become: yes
