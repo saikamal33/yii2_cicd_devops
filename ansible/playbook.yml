@@ -44,20 +44,7 @@
       shell: docker pull {{ docker_image }}
       become: yes
       
-    - name: Check if the service exists
-      shell: docker service ls --format '{{.Name}}' | grep -w yii2_app_service
-      register: service_check
-      ignore_errors: true
-      changed_when: false
-
-    - name: Create the Docker service (if not exists)
+    - name: Create the Docker Swarm service
       shell: docker service create --name yii2_app_service --replicas 1 --publish 80:80 {{ docker_image }}
-      when: service_check.rc != 0
-      become: yes
-
-    - name: Update the Docker Swarm service (if exists)
-      shell: docker service update --image {{ docker_image }} yii2_app_service
-      when: service_check.rc == 0
-      become: yes service update --image {{ docker_image }} yii2_app_service
-      become: yes
+      become: true
 
