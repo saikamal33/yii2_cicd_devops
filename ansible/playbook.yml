@@ -43,6 +43,12 @@
     - name: Pull the latest Docker image
       shell: docker pull {{ docker_image }}
       become: yes
+      
+    - name: Check if the service exists
+      shell: docker service ls --format '{{.Name}}' | grep -w yii2_app_service
+      register: service_check
+      ignore_errors: true
+      changed_when: false
 
     - name: Create the Docker service (if not exists)
       shell: docker service create --name yii2_app_service --replicas 1 --publish 80:80 {{ docker_image }}
